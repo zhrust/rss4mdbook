@@ -1,0 +1,36 @@
+[package]
+name = "rss4mdbook"
+version = "0.1.42"
+edition = "2021"
+
+authors = ["Zoom.Quiet <zoomquiet+rs@gmail.com>"]
+#license = "BSD-2-Clause"
+license-file = "LICENSE"
+description = "a generator for mdBook as CLI tool, export RSS.xml into u want path..."
+
+readme = "README.md"
+#homepage = "https://rs.101.so/dev/cli_rss4mdbook.html"
+#repository = "https://github.com/zhrust/rss4mdbook"
+
+keywords = ["cli", "RSS", "mdBook", "generator", "XML", "serialization"]
+categories = ["command-line-utilities","encoding","text-processing"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = "0.4"
+tracing = "0.1"
+clia-tracing-config = "0.2"
+dotenv = "0.15.0"
+
+chrono = "0.4.23"
+walkdir = "2"
+rss = "2.0.2"
+#feed-rs = "1.3.0"
+#quick-xml = "0.27.1"
+toml = "0.7.2"
+
+[dependencies.clap]
+version = "4.1.6"
+features = ["derive"]
+
