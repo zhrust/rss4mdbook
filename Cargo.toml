@@ -9,8 +9,8 @@ license-file = "LICENSE"
 description = "a generator for mdBook as CLI tool, export RSS.xml into u want path..."
 
 readme = "README.md"
-#homepage = "https://rs.101.so/dev/cli_rss4mdbook.html"
-#repository = "https://github.com/zhrust/rss4mdbook"
+homepage = "https://rs.101.so/dev/cli_rss4mdbook.html"
+repository = "https://github.com/zhrust/rss4mdbook"
 
 keywords = ["cli", "RSS", "mdBook", "generator", "XML", "serialization"]
 categories = ["command-line-utilities","encoding","text-processing"]
