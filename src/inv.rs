@@ -7,7 +7,7 @@ use clap::Parser;
 //use clap::{AppSettings, Parser, Subcommand};
 
 pub mod util;
-pub mod cfg;
+//pub mod cfg;
 pub mod gen;
 
 //#[command(name = "My CLI Tool"
@@ -16,13 +16,14 @@ pub mod gen;
 #[derive(Debug, Parser)]
 #[command(author, version, about, 
     long_about = r#"RSS4mdBook Usage:
-0: must setup .env for mdBook SSG site;
-    $ rss4mdbook cfg book path/2/u/mdbook/book.toml
+- 0: config mdBook's book.toml, append such as:
 
-> daily usage , only one shot:
-0: mdbook build
-1: append the lasted 5 articles as rss.xml 
-    $ rss4mdbook gen
+    [rss4mdbook]
+    url-base = "https://rs.101.so"
+
+- 1: mdbook build
+- 2: use `gen` command, append the lasted 4 articles as rss.xml 
+    $ rss4mdbook gen path/2/u/mdbook/book.toml
     "#)] // Read from `Cargo.toml`
 pub struct Cli {
     #[command(subcommand)]
@@ -31,7 +32,8 @@ pub struct Cli {
 
 #[derive(Debug, clap::Parser)]
 pub enum Commands {
-    #[command(about = "book path/2/u/loc./mdbook/book.toml ~ set loc. writing path...")]
+/* 
+    #[command(about = "book /path/2/u/loc./mdbook/book.toml ~ set loc. writing path...")]
     #[command(arg_required_else_help = false)]
     Cfg {
         #[arg(value_name = "BOOK")]
@@ -40,10 +42,13 @@ pub enum Commands {
         path: String,
     },
 
-
-    #[command(about = "re-generating .yaml -> ~/Library/Rime/[U BXM].yaml, , config by command: cfg")]
+ */
+    #[command(about = "/path/2/u/loc./mdbook/book.toml ~ NEED absolutely path")]
     #[command(arg_required_else_help = false)]
-    Gen,
+    Gen {
+        #[arg(value_name = "BOOK")]
+        book: String,
+    },
 
     #[command(external_subcommand)]
     External(Vec<OsString>),
@@ -66,10 +71,11 @@ pub fn run() {
 
     match args.command {
     // name.path
-        Commands::Cfg {
-            book, path }=> cfg::set(book, path),
+        //Commands::Cfg {
+        //    book, path }=> cfg::set(book, path),
     // not need arg.
-        Commands::Gen   => gen::exp(),
+        Commands::Gen {
+            book} => gen::exp(book),
 
     // others
         Commands::External(args) => {

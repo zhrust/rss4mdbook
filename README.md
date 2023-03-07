@@ -48,18 +48,20 @@ For more information,
 
 ------
 ## Usage
-
-0: must setup .env for mdBook SSG site;
-
-    $ rss4mdbook cfg book path/2/u/mdbook/book.toml
-
 > daily usage , only one shot:
 
-- 0: mdbook build
-- 1: append the lasted 5 articles as rss.xml 
+- 0: config mdBook's book.toml, append such as:
+
+```toml
+...
+[rss4mdbook]
+url-base = "https://rs.101.so"
+```
+- 1: mdbook build
+- 2: use `gen` command, append the lasted 4 articles as rss.xml 
 
 ```
-$ rss4mdbook gen
+$ rss4mdbook gen /path/2u/mdbook/book.toml
 ```
 
 that all, 
@@ -67,7 +69,7 @@ should make `pub.sh` under u mdBook site root,
 include commands like:
 
 - mdbook build
-- rss4mdbook gen
+- rss4mdbook gen /path/2u/mdbook/book.toml
 - git add .
 - git commit -a .
 - git push
@@ -82,7 +84,8 @@ u need modify u `theme/index.hbs` insert the rss.xml at some where.
 ## logging
 
 - ...
-- 230307 ZQ init.
+- 230308 ZQ publish 2 version
+- 230306 ZQ init.
 
 
 ### refer.

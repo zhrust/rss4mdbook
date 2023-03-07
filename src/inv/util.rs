@@ -39,8 +39,8 @@ use dotenv::dotenv;
 
 //pub const ENV_SRC: &str = "RSS4MDBOOK_SRC";
 pub const ENV_BOOK: &str = "RSS4MDBOOK_TOML";
-pub const RSS_TITLE: &str = "锈周刊 -> Weekly :: China<Rustaceans>";
-pub const RSS_DESC: &str = "~ 汇集上周全球锈事儿, 由 大妈/Zoom.Quiet 根据 <Rust recap for week> 快译++吐槽而得, 共同定期追踪值得oxygenation/氧化之事儿...";
+//pub const RSS_TITLE: &str = "锈周刊 -> Weekly :: China<Rustaceans>";
+//pub const RSS_DESC: &str = "~ 汇集上周全球锈事儿, 由 大妈/Zoom.Quiet 根据 <Rust recap for week> 快译++吐槽而得, 共同定期追踪值得oxygenation/氧化之事儿...";
 
 pub fn upd_denv(key: &str, val: &str) {
     match ok_denv() {

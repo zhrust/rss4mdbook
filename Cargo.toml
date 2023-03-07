@@ -1,6 +1,6 @@
 [package]
 name = "rss4mdbook"
-version = "0.1.42"
+version = "0.2.42"
 edition = "2021"
 
 authors = ["Zoom.Quiet <zoomquiet+rs@gmail.com>"]

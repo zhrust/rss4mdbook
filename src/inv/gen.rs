@@ -1,4 +1,4 @@
-//#![allow(unused)]
+#![allow(unused)]
 //use std::error::Error;
 use std::fs;
 use std::fs::File;
@@ -36,7 +36,7 @@ use crate::inv::util;
 - export as rss.xml -> u want path
 /Users/zoomq/Exercism/proj/rss4mdbook/target/debug
 */
-pub fn exp() {
+pub fn exp(book:String) {
     //println!("src/inv/gen: {}", env!("CARGO_PKG_VERSION"));
     let pkg_name = option_env!("CARGO_PKG_NAME").unwrap_or("DAMA's Crate");
     let pkg_version = option_env!("CARGO_PKG_VERSION").unwrap_or("0.1.42");
@@ -45,10 +45,11 @@ pub fn exp() {
     println!("digging and generating by\n\t~> {} v{} <~",pkg_name,pkg_version);
     //log::debug!("src/inv/gen: as {}", env!("CARGO_PKG_VERSION"));
 // check .env is OK?
-    match util::chk_denv(util::ENV_BOOK) {
-        util::EnvResult::Success(_ekey, _p2docs) => {
+//    match util::chk_denv(util::ENV_BOOK) {
+//        util::EnvResult::Success(_ekey, _p2docs) => {
             println!("let's make RSS now...");
             //log::debug!(".env:\n {}={}",_ekey, _p2docs);
+    let _p2docs = book;
 // try read ENV_BOOK
     match read_file(&_p2docs) {
         Ok(contents) => {
@@ -56,8 +57,22 @@ pub fn exp() {
         let toml_value = contents.parse::<Value>().unwrap();
         let src = toml_value["book"]["src"].as_str().unwrap();
         let build_dir = toml_value["build"]["build-dir"].as_str().unwrap();
-        let rss_url_base = toml_value["rss4mdbook"]["url-base"].as_str().unwrap();
+        //let rss_url_base = toml_value["rss4mdbook"]["url-base"].as_str().unwrap();
 
+match toml_value.get("rss4mdbook").and_then(|v| v.get("url_base").and_then(Value::as_str)) {
+    Some(rss_url_base) => {
+        // url-base 存在，并且是字符串类型
+        println!("Found url-base: {}", rss_url_base.clone());
+
+let rss_title = toml_value["rss4mdbook"]["rss_title"]
+        .as_str()
+        .unwrap_or("RSS TITLE not define in book.toml");
+let rss_desc = toml_value["rss4mdbook"]["rss_desc"]
+        .as_str()
+        .unwrap_or("RSS DESCRIPTION not define in book.toml");
+
+//rss_title
+//rss_desc
         if let Some(directory_str) = get_directory(&_p2docs) {
             let src2md = format!("{}/{}",directory_str,src);
             let expath = format!("{}/{}",directory_str,build_dir);
@@ -74,19 +89,35 @@ pub fn exp() {
             for md in latest5files.clone() {
                 println!("\t{}",md);
             }
-        match rss4top5md(rss_url_base.to_owned()
+        match rss4top5md((&rss_url_base).to_string()
                     , exprss.clone()
                     , src2md.clone()
+                    , (&rss_title).to_string()
+                    , (&rss_desc).to_string()
                     , latest5files){
                 Ok(_) => println!("\n Export => {}\n\n",exprss.clone()),
                 Err(e) =>println!("Error: {}", e)
                 }
             }//get_directory(&_p2docs)
+
+    },
+    None => {
+        // url-base 不存在或不是字符串类型
+        println!(r#"Warning: 
+[rss4mdbook] not config in mdBook's book.toml, please append such as:
+
+    [rss4mdbook]
+    url-base = "https://rs.101.so" # u site's root URL
+    "#);
+        std::process::exit(1);
+    }
+} //toml_value.get("rss4mdbook").and_then
+
         }, Err(e) => println!("Error: {}", e)
     }// match read_file(&_p2docs)
 
-        },util::EnvResult::Failure(e) => println!("failed: {}", e),
-    }//match util::chk_denv(util::ENV_BOOK)
+//        },util::EnvResult::Failure(e) => println!("failed: {}", e),
+//    }//match util::chk_denv(util::ENV_BOOK)
 //    Ok(())
 }
 
@@ -145,15 +176,17 @@ fn scan_dir(src2md: String, topn:usize) -> Vec<String> {
 
 
 fn rss4top5md(uri:String
-    , rss:String
+    , rssfile:String
     , src2md:String
+    , rss_title:String
+    , rss_desc:String
     , latest5files: Vec<String>) -> Result<(), Box<dyn std::error::Error>>{
     // 创建一个 RSS channel
     let mut channel = Channel::default();
     // 设置 channel 的元数据
-    channel.title = util::RSS_TITLE.to_string();//"My RSS feed".to_owned();
     channel.link = uri.clone();//"https://example.com".to_owned();
-    channel.description = util::RSS_DESC.to_string();//"This is my RSS feed".to_owned();
+    channel.title = rss_title;//util::RSS_TITLE.to_string();//"My RSS feed".to_owned();
+    channel.description = rss_desc;//util::RSS_DESC.to_string();//"This is my RSS feed".to_owned();
     channel.generator = Some("my_rss_generator".to_owned());
 
     // 为每个文件创建 RSS item
@@ -189,7 +222,7 @@ fn rss4top5md(uri:String
         channel.items.push(item);
     }
     // Write the RSS XML to the output file
-    let mut output_file = File::create(rss)?;
+    let mut output_file = File::create(rssfile)?;
     output_file.write_fmt(format_args!("{}", channel.to_string()))?;
 
     Ok(())
