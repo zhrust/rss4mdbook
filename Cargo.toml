@@ -12,7 +12,7 @@ readme = "README.md"
 homepage = "https://rs.101.so/dev/cli_rss4mdbook.html"
 repository = "https://github.com/zhrust/rss4mdbook"
 
-keywords = ["cli", "RSS", "mdBook", "generator", "XML", "serialization"]
+keywords = ["cli", "RSS", "mdBook", "generator", "serialization"]
 categories = ["command-line-utilities","encoding","text-processing"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
